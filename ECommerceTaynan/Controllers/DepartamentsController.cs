@@ -107,8 +107,25 @@ namespace ECommerceTaynan.Controllers
         {
             Departaments departaments = db.Departaments.Find(id);
             db.Departaments.Remove(departaments);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception ex)
+            {
+                if (ex.InnerException != null &&
+                        ex.InnerException.InnerException != null &&
+                        ex.InnerException.InnerException.Message.Contains("REFERENCE"))
+                {
+                    ModelState.AddModelError(string.Empty, "Não é possivel remover o departamento pois existe cidades relacionadas !!");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+                return View(departaments);
+            }
         }
 
         protected override void Dispose(bool disposing)

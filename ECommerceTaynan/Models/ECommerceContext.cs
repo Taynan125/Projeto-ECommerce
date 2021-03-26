@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace ECommerceTaynan.Models
 {
@@ -8,6 +9,14 @@ namespace ECommerceTaynan.Models
         {
 
         }
+
+        //DESABILITAR CASCATAS
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+        }
+
 
         public System.Data.Entity.DbSet<ECommerceTaynan.Models.Departaments> Departaments { get; set; }
 
