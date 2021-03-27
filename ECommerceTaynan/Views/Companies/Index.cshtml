@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<ECommerceTaynan.Models.Company>
 
 @{
-    ViewBag.Title = "Companias";
+    ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Compania</h2>
 
 <p>
-    @Html.ActionLink("Nova Compania", "Create", new { }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Nova Compania", "Create", new { }, new { @class = " btn btn-primary " })
 </p>
 <table class="table">
     <tr>
@@ -53,9 +53,9 @@
             @Html.DisplayFor(modelItem => item.Logo)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CompanyId }, new { @class = "btn btn-warning" }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CompanyId }, new { @class = "btn btn-info" }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CompanyId }, new { @class = "btn btn-danger" })
+            @Html.ActionLink("Edit", "Edit", new { id=item.CompanyId }, new { @class = " btn btn-warning " }) |
+            @Html.ActionLink("Details", "Details", new { id=item.CompanyId }, new { @class = " btn btn-info " }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.CompanyId }, new { @class = " btn btn-danger " })
         </td>
     </tr>
 }

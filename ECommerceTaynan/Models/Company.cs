@@ -35,16 +35,16 @@ namespace ECommerceTaynan.Models
         [DataType(DataType.ImageUrl)]
         public String Logo { get; set; }
 
-        [Required(ErrorMessage = "O campo Cidade é obrigatorio")]
-        [Display(Name = "Cidade")]
-        public int CityId { get; set; }
-
         [Required(ErrorMessage = "O campo Departamento é obrigatorio")]
         [Display(Name = "Departamento")]
         public int DepartamentsId { get; set; }
 
-        public virtual City Cities { get; set; }
+        [Required(ErrorMessage = "O campo Cidade é obrigatorio")]
+        [Display(Name = "Cidade")]
+        public int CityId { get; set; }
 
         public virtual Departaments Departaments { get; set; }
+
+        public virtual City Cities { get; set; }
     }
 }

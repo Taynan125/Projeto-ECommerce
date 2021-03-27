@@ -1,19 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using ECommerceTaynan.Classes;
+using ECommerceTaynan.Models;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using ECommerceTaynan.Classes;
-using ECommerceTaynan.Models;
 
 namespace ECommerceTaynan.Controllers
 {
     public class CompaniesController : Controller
     {
         private ECommerceContext db = new ECommerceContext();
+
+        //ORDENAR LIST VIEW
+
+        public JsonResult GetCities(int departmentId)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var cities = db.Cities.Where(m => m.DepartamentsId == departmentId);
+            return Json(cities);
+        }
 
         // GET: Companies
         public ActionResult Index()
@@ -50,7 +55,7 @@ namespace ECommerceTaynan.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CompanyId,Name,Phone,Address,Logo,CityId,DepartamentsId")] Company company)
+        public ActionResult Create([Bind(Include = "CompanyId,Name,Phone,Address,Logo,DepartamentsId,CityId")] Company company)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +91,7 @@ namespace ECommerceTaynan.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CompanyId,Name,Phone,Address,Logo,CityId,DepartamentsId")] Company company)
+        public ActionResult Edit([Bind(Include = "CompanyId,Name,Phone,Address,Logo,DepartamentsId,CityId")] Company company)
         {
             if (ModelState.IsValid)
             {
