@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ECommerceTaynan.Models
@@ -19,5 +20,7 @@ namespace ECommerceTaynan.Models
         public int DepartamentsId { get; set; }
 
         public virtual Departaments Departaments { get; set; }
+
+        public virtual ICollection<Company> Companies { get; set; }
     }
 }

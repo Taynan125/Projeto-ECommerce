@@ -20,5 +20,7 @@ namespace ECommerceTaynan.Models
         public String Name { get; set; }
 
         public virtual ICollection<City> Cities { get; set; }
+
+        public virtual ICollection<Company> Companies { get; set; }
     }
 }
