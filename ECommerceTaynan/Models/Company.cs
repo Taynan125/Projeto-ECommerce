@@ -35,6 +35,9 @@ namespace ECommerceTaynan.Models
         [DataType(DataType.ImageUrl)]
         public String Logo { get; set; }
 
+        [NotMapped]
+        public HttpPostedFileBase LogoFile { get; set; }
+
         [Required(ErrorMessage = "O campo Departamento é obrigatorio")]
         [Display(Name = "Departamento")]
         public int DepartamentsId { get; set; }
