@@ -67,9 +67,9 @@ namespace ECommerceTaynan.Controllers
                 {
                     pic = FilesHelper.UploadPhoto(company.LogoFile, folder);
                     pic = string.Format("{0}/{1}", folder, pic);
+                    company.Logo = pic;
                 }
-
-                company.Logo = pic;
+                
                 db.Companies.Add(company);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -102,10 +102,20 @@ namespace ECommerceTaynan.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CompanyId,Name,Phone,Address,Logo,DepartamentsId,CityId")] Company company)
+        public ActionResult Edit(Company company)
         {
             if (ModelState.IsValid)
             {
+                var pic = string.Empty;
+                var folder = "~/Content/Logos";
+
+                if (company.LogoFile != null)
+                {
+                    pic = FilesHelper.UploadPhoto(company.LogoFile, folder);
+                    pic = string.Format("{0}/{1}", folder, pic);
+                    company.Logo = pic;
+                }
+
                 db.Entry(company).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
