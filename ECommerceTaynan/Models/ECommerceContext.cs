@@ -23,5 +23,7 @@ namespace ECommerceTaynan.Models
         public System.Data.Entity.DbSet<ECommerceTaynan.Models.City> Cities { get; set; }
 
         public System.Data.Entity.DbSet<ECommerceTaynan.Models.Company> Companies { get; set; }
+
+        public System.Data.Entity.DbSet<ECommerceTaynan.Models.User> Users { get; set; }
     }
 }

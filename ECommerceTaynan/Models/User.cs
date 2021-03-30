@@ -1,28 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Web;
 
 namespace ECommerceTaynan.Models
 {
-    public class Company
+    public class User
     {
         [Key]
-        [Display(Name = "Compania Id")]
-        public int CompanyId { get; set; }
+        [Display(Name = "Usuario Id")]
+        public int UserId { get; set; }
+
+        [Required(ErrorMessage = "O campo Email é obrigatorio")]
+        [MaxLength(250, ErrorMessage = "O campo Email recebe no máximo 250 caracter")]
+        [Display(Name = "Email")]
+        [Index("User_Email_Index", IsUnique = true)]
+        [DataType(DataType.EmailAddress)]
+        public String Email { get; set; }
 
         [Required(ErrorMessage = "O campo Nome é obrigatorio")]
         [MaxLength(50, ErrorMessage = "O campo Nome recebe no máximo 50 caracter")]
         [Display(Name = "Nome")]
-        [Index("Departament_Name_Index", IsUnique = true)]
-        public String Name { get; set; }
+        public String FirtName { get; set; }
+
+        [Required(ErrorMessage = "O campo Sobrenome é obrigatorio")]
+        [MaxLength(50, ErrorMessage = "O campo Sobrenome recebe no máximo 50 caracter")]
+        [Display(Name = "Nome")]
+        public String LastName { get; set; }
 
         [Required(ErrorMessage = "O campo Telefone é obrigatorio")]
         [MaxLength(50, ErrorMessage = "O campo Telefone recebe no máximo 50 caracter")]
         [Display(Name = "Telefone")]
-        [Index("Departament_Phone_Index", IsUnique = true)]
+        [Index("User_Phone_Index", IsUnique = true)]
         [DataType(DataType.PhoneNumber)]
         public String Phone { get; set; }
 
@@ -33,10 +42,10 @@ namespace ECommerceTaynan.Models
 
         [Display(Name = "Imagem")]
         [DataType(DataType.ImageUrl)]
-        public String Logo { get; set; }
+        public String Photo { get; set; }
 
         [NotMapped]
-        public HttpPostedFileBase LogoFile { get; set; }
+        public HttpPostedFileBase PhotoFile { get; set; }
 
         [Required(ErrorMessage = "O campo Departamento é obrigatorio")]
         [Display(Name = "Departamento")]
@@ -46,10 +55,17 @@ namespace ECommerceTaynan.Models
         [Display(Name = "Cidade")]
         public int CityId { get; set; }
 
+        [Required(ErrorMessage = "O campo Compania é obrigatorio")]
+        [Display(Name = "Compania")]
+        public int CompanyId { get; set; }
+
+        [Display(Name = "Usuario")]
+        public String FullName { get { return string.Format("{0} {1}", FirtName, LastName); } }
+
         public virtual Departaments Departaments { get; set; }
 
         public virtual City Cities { get; set; }
 
-        public virtual ICollection<User> Users { get; set; }
+        public virtual Company Company { get; set; }
     }
 }
