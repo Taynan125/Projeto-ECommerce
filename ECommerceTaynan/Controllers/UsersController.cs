@@ -62,6 +62,7 @@ namespace ECommerceTaynan.Controllers
             {
                 db.Users.Add(user);
                 db.SaveChanges();
+                UserHelper.UsersHelper.CreateUserASP(user.Email, "User");
 
                 if (user.PhotoFile != null)
                 {

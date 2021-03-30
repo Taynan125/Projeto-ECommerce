@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ECommerceTaynan.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -15,11 +16,19 @@ namespace ECommerceTaynan
         protected void Application_Start()
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<Models.ECommerceContext, Migrations.Configuration>());
+            CheckRolesAndSuperUser();
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        private void CheckRolesAndSuperUser()
+        {
+            UserHelper.UsersHelper.CheckRole("Admin");
+            UserHelper.UsersHelper.CheckRole("User");
+            UserHelper.UsersHelper.CheckSuperUser();
         }
     }
 }
