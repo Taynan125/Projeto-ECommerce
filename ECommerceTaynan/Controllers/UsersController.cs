@@ -1,4 +1,5 @@
-﻿using ECommerceTaynan.Models;
+﻿using ECommerceTaynan.Classes;
+using ECommerceTaynan.Models;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -9,6 +10,15 @@ namespace ECommerceTaynan.Controllers
     public class UsersController : Controller
     {
         private ECommerceContext db = new ECommerceContext();
+
+        //ORDENAR LIST VIEW
+
+        public JsonResult GetCities(int departmentId)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var cities = db.Cities.Where(m => m.DepartamentsId == departmentId);
+            return Json(cities);
+        }
 
         // GET: Users
         public ActionResult Index()
@@ -35,9 +45,9 @@ namespace ECommerceTaynan.Controllers
         // GET: Users/Create
         public ActionResult Create()
         {
-            ViewBag.CityId = new SelectList(db.Cities, "CityId", "Name");
-            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name");
-            ViewBag.DepartamentsId = new SelectList(db.Departaments, "DepartamentsId", "Name");
+            ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name");
+            ViewBag.CompanyId = new SelectList(ComboHelper.GetCompanys(), "CompanyId", "Name");
+            ViewBag.DepartamentsId = new SelectList(ComboHelper.GetDepartaments(), "DepartamentsId", "Name");
             return View();
         }
 
@@ -55,9 +65,9 @@ namespace ECommerceTaynan.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CityId = new SelectList(db.Cities, "CityId", "Name", user.CityId);
-            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", user.CompanyId);
-            ViewBag.DepartamentsId = new SelectList(db.Departaments, "DepartamentsId", "Name", user.DepartamentsId);
+            ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", user.CityId);
+            ViewBag.CompanyId = new SelectList(ComboHelper.GetCompanys(), "CompanyId", "Name", user.CompanyId);
+            ViewBag.DepartamentsId = new SelectList(ComboHelper.GetDepartaments(), "DepartamentsId", "Name", user.DepartamentsId);
             return View(user);
         }
 
@@ -73,9 +83,9 @@ namespace ECommerceTaynan.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CityId = new SelectList(db.Cities, "CityId", "Name", user.CityId);
-            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", user.CompanyId);
-            ViewBag.DepartamentsId = new SelectList(db.Departaments, "DepartamentsId", "Name", user.DepartamentsId);
+            ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", user.CityId);
+            ViewBag.CompanyId = new SelectList(ComboHelper.GetCompanys(), "CompanyId", "Name", user.CompanyId);
+            ViewBag.DepartamentsId = new SelectList(ComboHelper.GetDepartaments(), "DepartamentsId", "Name", user.DepartamentsId);
             return View(user);
         }
 
@@ -92,9 +102,9 @@ namespace ECommerceTaynan.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CityId = new SelectList(db.Cities, "CityId", "Name", user.CityId);
-            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", user.CompanyId);
-            ViewBag.DepartamentsId = new SelectList(db.Departaments, "DepartamentsId", "Name", user.DepartamentsId);
+            ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", user.CityId);
+            ViewBag.CompanyId = new SelectList(ComboHelper.GetCompanys(), "CompanyId", "Name", user.CompanyId);
+            ViewBag.DepartamentsId = new SelectList(ComboHelper.GetDepartaments(), "DepartamentsId", "Name", user.DepartamentsId);
             return View(user);
         }
 
