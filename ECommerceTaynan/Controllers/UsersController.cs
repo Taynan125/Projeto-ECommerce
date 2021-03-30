@@ -56,11 +56,27 @@ namespace ECommerceTaynan.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserId,Email,FirtName,LastName,Phone,Address,Photo,DepartamentsId,CityId,CompanyId")] User user)
+        public ActionResult Create( User user)
         {
             if (ModelState.IsValid)
             {
                 db.Users.Add(user);
+                db.SaveChanges();
+
+                if (user.PhotoFile != null)
+                {
+                    var pic = string.Empty;
+                    var folder = "~/Content/User";
+                    var file = string.Format("{0}.jpg", user.UserId);
+                    var response = FilesHelper.UploadPhoto(user.PhotoFile, folder, file);
+
+                    if (response)
+                    {
+                        pic = string.Format("{0}/{1}", folder, file);
+                        user.Photo = pic;
+                    }
+                }
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -94,10 +110,24 @@ namespace ECommerceTaynan.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserId,Email,FirtName,LastName,Phone,Address,Photo,DepartamentsId,CityId,CompanyId")] User user)
+        public ActionResult Edit( User user)
         {
             if (ModelState.IsValid)
             {
+                if (user.PhotoFile != null)
+                {
+                    var pic = string.Empty;
+                    var folder = "~/Content/User";
+                    var file = string.Format("{0}.jpg", user.UserId);
+                    var response = FilesHelper.UploadPhoto(user.PhotoFile, folder, file);
+
+                    if (response)
+                    {
+                        pic = string.Format("{0}/{1}", folder, file);
+                        user.Photo = pic;
+                    }
+                }
+
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
