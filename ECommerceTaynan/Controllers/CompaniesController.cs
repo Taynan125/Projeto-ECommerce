@@ -60,24 +60,44 @@ namespace ECommerceTaynan.Controllers
             if (ModelState.IsValid)
             {
                 db.Companies.Add(company);
-                db.SaveChanges();
-
-                if (company.LogoFile != null)
+                try
                 {
-                    var pic = string.Empty;
-                    var folder = "~/Content/Logos";
-                    var file = string.Format("{0}.jpg", company.CompanyId);
-                    var response = FilesHelper.UploadPhoto(company.LogoFile, folder, file);
+                    db.SaveChanges();
 
-                    if (response)
+                    if (company.LogoFile != null)
                     {
-                        pic = string.Format("{0}/{1}", folder, file);
-                        company.Logo = pic;
+                        var pic = string.Empty;
+                        var folder = "~/Content/Logos";
+                        var file = string.Format("{0}.jpg", company.CompanyId);
+                        var response = FilesHelper.UploadPhoto(company.LogoFile, folder, file);
+
+                        if (response)
+                        {
+                            pic = string.Format("{0}/{1}", folder, file);
+                            company.Logo = pic;
+                        }
                     }
+                    db.Entry(company).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
-                db.Entry(company).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException != null &&
+                        ex.InnerException.InnerException != null &&
+                        ex.InnerException.InnerException.Message.Contains("_Index"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Não é possivel inserir Compania ou Telefone com o mesmo nome !!");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+
+                    ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", company.CityId);
+                    ViewBag.DepartamentsId = new SelectList(ComboHelper.GetDepartaments(), "DepartamentsId", "Name", company.DepartamentsId);
+                    return View(company);
+                }
             }
 
             ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", company.CityId);
@@ -126,8 +146,27 @@ namespace ECommerceTaynan.Controllers
                 }
 
                 db.Entry(company).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException != null &&
+                        ex.InnerException.InnerException != null &&
+                        ex.InnerException.InnerException.Message.Contains("_Index"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Não é possivel inserir Compania ou Telefone com o mesmo nome !!");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+                    ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", company.CityId);
+                    ViewBag.DepartamentsId = new SelectList(ComboHelper.GetDepartaments(), "DepartamentsId", "Name", company.DepartamentsId);
+                    return View(company);
+                }
             }
             ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", company.CityId);
             ViewBag.DepartamentsId = new SelectList(ComboHelper.GetDepartaments(), "DepartamentsId", "Name", company.DepartamentsId);
