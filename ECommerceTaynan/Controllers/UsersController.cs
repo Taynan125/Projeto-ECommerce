@@ -129,8 +129,18 @@ namespace ECommerceTaynan.Controllers
                     }
                 }
 
+                var db2 = new ECommerceContext();
+                var currentUser = db2.Users.Find(user.UserId);
+                if(currentUser.Email != user.Email)
+                {
+                    UserHelper.UsersHelper.UpdateUserName(currentUser.Email, user.Email);
+                }
+
+                db2.Dispose();
+
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
+                
                 return RedirectToAction("Index");
             }
             ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", user.CityId);
@@ -162,6 +172,7 @@ namespace ECommerceTaynan.Controllers
             User user = db.Users.Find(id);
             db.Users.Remove(user);
             db.SaveChanges();
+            UserHelper.UsersHelper.DeletarUser(user.Email);
             return RedirectToAction("Index");
         }
 
