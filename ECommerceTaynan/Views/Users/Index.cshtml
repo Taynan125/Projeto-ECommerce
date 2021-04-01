@@ -4,10 +4,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Lista de Usuarios</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Criar Novo", "Create", new { }, new { @class = "btn btn-primary" })
 </p>
 <table class="table">
     <tr>
@@ -70,13 +70,13 @@
         <td>
             @if (!string.IsNullOrEmpty(item.Photo))
             {
-                <img src="@Url.Content(item.Photo)" alt="Image" style="width:100px;height:150px;max-width: 100%; height: auto;" />
+                <img src="@Url.Content(item.Photo)" alt="Image" style="width:50px;height:100px;max-width: 100%; height: auto;" />
             }
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.UserId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.UserId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.UserId })
+            @Html.ActionLink("Editar", "Edit", new { id=item.UserId }, new { @class = "btn btn-warning" }) |
+            @Html.ActionLink("Detalhes", "Details", new { id=item.UserId }, new { @class = "btn btn-info" }) |
+            @Html.ActionLink("Excluir", "Delete", new { id=item.UserId }, new { @class = "btn btn-danger" })
         </td>
     </tr>
 }

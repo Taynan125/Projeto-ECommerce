@@ -61,25 +61,46 @@ namespace ECommerceTaynan.Controllers
             if (ModelState.IsValid)
             {
                 db.Users.Add(user);
-                db.SaveChanges();
-                UserHelper.UsersHelper.CreateUserASP(user.Email, "User");
-
-                if (user.PhotoFile != null)
+                try
                 {
-                    var pic = string.Empty;
-                    var folder = "~/Content/User";
-                    var file = string.Format("{0}.jpg", user.UserId);
-                    var response = FilesHelper.UploadPhoto(user.PhotoFile, folder, file);
+                    db.SaveChanges();
+                    UserHelper.UsersHelper.CreateUserASP(user.Email, "User");
 
-                    if (response)
+                    if (user.PhotoFile != null)
                     {
-                        pic = string.Format("{0}/{1}", folder, file);
-                        user.Photo = pic;
+                        var pic = string.Empty;
+                        var folder = "~/Content/User";
+                        var file = string.Format("{0}.jpg", user.UserId);
+                        var response = FilesHelper.UploadPhoto(user.PhotoFile, folder, file);
+
+                        if (response)
+                        {
+                            pic = string.Format("{0}/{1}", folder, file);
+                            user.Photo = pic;
+                        }
                     }
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException != null &&
+                        ex.InnerException.InnerException != null &&
+                        ex.InnerException.InnerException.Message.Contains("_Index"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Telefone ou email ja existentes !!");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+
+                    ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", user.CityId);
+                    ViewBag.CompanyId = new SelectList(ComboHelper.GetCompanys(), "CompanyId", "Name", user.CompanyId);
+                    ViewBag.DepartamentsId = new SelectList(ComboHelper.GetDepartaments(), "DepartamentsId", "Name", user.DepartamentsId);
+                    return View(user);
+                }
             }
 
             ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", user.CityId);
@@ -129,19 +150,41 @@ namespace ECommerceTaynan.Controllers
                     }
                 }
 
-                var db2 = new ECommerceContext();
-                var currentUser = db2.Users.Find(user.UserId);
-                if(currentUser.Email != user.Email)
-                {
-                    UserHelper.UsersHelper.UpdateUserName(currentUser.Email, user.Email);
-                }
-
-                db2.Dispose();
 
                 db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-                
-                return RedirectToAction("Index");
+                try
+                {
+
+                    var db2 = new ECommerceContext();
+                    var currentUser = db2.Users.Find(user.UserId);
+                    if (currentUser.Email != user.Email)
+                    {
+                        UserHelper.UsersHelper.UpdateUserName(currentUser.Email, user.Email);
+                    }
+
+                    db2.Dispose();
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException != null &&
+                        ex.InnerException.InnerException != null &&
+                        ex.InnerException.InnerException.Message.Contains("_Index"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Telefone ou email ja existentes !!");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+
+                    ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", user.CityId);
+                    ViewBag.CompanyId = new SelectList(ComboHelper.GetCompanys(), "CompanyId", "Name", user.CompanyId);
+                    ViewBag.DepartamentsId = new SelectList(ComboHelper.GetDepartaments(), "DepartamentsId", "Name", user.DepartamentsId);
+                    return View(user);
+                }
             }
             ViewBag.CityId = new SelectList(ComboHelper.GetCities(), "CityId", "Name", user.CityId);
             ViewBag.CompanyId = new SelectList(ComboHelper.GetCompanys(), "CompanyId", "Name", user.CompanyId);

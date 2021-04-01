@@ -25,7 +25,7 @@ namespace ECommerceTaynan.Models
 
         [Required(ErrorMessage = "O campo Sobrenome é obrigatorio")]
         [MaxLength(50, ErrorMessage = "O campo Sobrenome recebe no máximo 50 caracter")]
-        [Display(Name = "Nome")]
+        [Display(Name = "Sobrenome")]
         public String LastName { get; set; }
 
         [Required(ErrorMessage = "O campo Telefone é obrigatorio")]
@@ -45,6 +45,7 @@ namespace ECommerceTaynan.Models
         public String Photo { get; set; }
 
         [NotMapped]
+        [Display(Name = "Imagem")]
         public HttpPostedFileBase PhotoFile { get; set; }
 
         [Required(ErrorMessage = "O campo Departamento é obrigatorio")]
