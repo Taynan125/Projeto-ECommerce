@@ -10,6 +10,7 @@ using ECommerceTaynan.Models;
 
 namespace ECommerceTaynan.Controllers
 {
+    [Authorize(Roles = "User")]
     public class CategoriesController : Controller
     {
         private ECommerceContext db = new ECommerceContext();
@@ -53,8 +54,26 @@ namespace ECommerceTaynan.Controllers
             if (ModelState.IsValid)
             {
                 db.Categories.Add(category);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException != null &&
+                        ex.InnerException.InnerException != null &&
+                        ex.InnerException.InnerException.Message.Contains("_Index"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Não é possivel inserir duas categorias com o mesmo nome se pertencerem a uma mesma distribuidora !!");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+                    ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", category.CompanyId);
+                    return View(category);
+                }
             }
 
             ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", category.CompanyId);
@@ -87,8 +106,26 @@ namespace ECommerceTaynan.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(category).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (System.Exception ex)
+                {
+                    if (ex.InnerException != null &&
+                        ex.InnerException.InnerException != null &&
+                        ex.InnerException.InnerException.Message.Contains("_Index"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Não é possivel inserir duas categorias com o mesmo nome se pertencerem a uma mesma distribuidora !!");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+                    ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", category.CompanyId);
+                    return View(category);
+                }
             }
             ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", category.CompanyId);
             return View(category);

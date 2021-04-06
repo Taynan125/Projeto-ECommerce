@@ -6,6 +6,8 @@ using System.Web.Mvc;
 
 namespace ECommerceTaynan.Controllers
 {
+    [Authorize(Roles = "Admin")]
+
     public class DepartamentsController : Controller
     {
         private ECommerceContext db = new ECommerceContext();
