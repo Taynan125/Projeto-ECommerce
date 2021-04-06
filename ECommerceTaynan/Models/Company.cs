@@ -51,5 +51,7 @@ namespace ECommerceTaynan.Models
         public virtual City Cities { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
+
+        public virtual ICollection<Category> Category { get; set; }
     }
 }

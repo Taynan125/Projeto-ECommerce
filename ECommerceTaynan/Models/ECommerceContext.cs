@@ -25,5 +25,7 @@ namespace ECommerceTaynan.Models
         public System.Data.Entity.DbSet<ECommerceTaynan.Models.Company> Companies { get; set; }
 
         public System.Data.Entity.DbSet<ECommerceTaynan.Models.User> Users { get; set; }
+
+        public System.Data.Entity.DbSet<ECommerceTaynan.Models.Category> Categories { get; set; }
     }
 }
