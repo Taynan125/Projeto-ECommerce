@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ECommerceTaynan.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,9 +9,12 @@ namespace ECommerceTaynan.Controllers
 {
     public class HomeController : Controller
     {
+        private ECommerceContext db = new ECommerceContext();
+
         public ActionResult Index()
         {
-            return View();
+            var user = db.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault();
+            return View(user);
         }
 
         public ActionResult About()
