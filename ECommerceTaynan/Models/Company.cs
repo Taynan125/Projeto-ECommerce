@@ -53,5 +53,7 @@ namespace ECommerceTaynan.Models
         public virtual ICollection<User> Users { get; set; }
 
         public virtual ICollection<Category> Category { get; set; }
+
+        public virtual ICollection<Tax> Taxes { get; set; }
     }
 }
