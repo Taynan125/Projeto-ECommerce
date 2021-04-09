@@ -12,9 +12,6 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Category.Description)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Company.Name)
         </th>
         <th>
@@ -41,9 +38,6 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Category.Description)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Company.Name)
         </td>
         <td>
@@ -59,7 +53,10 @@
             @Html.DisplayFor(modelItem => item.Price)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Image)
+            @if (!string.IsNullOrEmpty(item.Image))
+            {
+                <img src="@Url.Content(item.Image)" alt="Image" style="width:65px;height:65px;max-width: 100%; height: auto;" />
+            }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Remarks)

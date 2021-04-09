@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using ECommerceTaynan.Classes;
 using ECommerceTaynan.Models;
 
 namespace ECommerceTaynan.Controllers
@@ -17,7 +18,15 @@ namespace ECommerceTaynan.Controllers
         // GET: Products
         public ActionResult Index()
         {
-            var products = db.Products.Include(p => p.Category).Include(p => p.Company).Include(p => p.Tax);
+            var user = db.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault();
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var products = db.Products.Include(p => p.Category).Include(p => p.Tax)
+                .Where(c => c.CompanyId == user.CompanyId);
+
             return View(products.ToList());
         }
 
@@ -59,9 +68,14 @@ namespace ECommerceTaynan.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Description", product.CategoryId);
-            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", product.CompanyId);
-            ViewBag.TaxId = new SelectList(db.Taxes, "TaxId", "Description", product.TaxId);
+            var user = db.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault();
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.CategoryId = new SelectList(ComboHelper.GetCategories(user.CompanyId), "CategoryId", "Description", product.CategoryId);
+            ViewBag.TaxId = new SelectList(ComboHelper.GetTaxes(user.CompanyId), "TaxId", "Description", product.TaxId);
             return View(product);
         }
 
@@ -77,9 +91,9 @@ namespace ECommerceTaynan.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Description", product.CategoryId);
-            ViewBag.CompanyId = new SelectList(db.Companies, "CompanyId", "Name", product.CompanyId);
-            ViewBag.TaxId = new SelectList(db.Taxes, "TaxId", "Description", product.TaxId);
+
+            ViewBag.CategoryId = new SelectList(ComboHelper.GetCategories(product.CompanyId), "CategoryId", "Description", product.CategoryId);
+            ViewBag.TaxId = new SelectList(ComboHelper.GetTaxes(product.CompanyId), "TaxId", "Description", product.TaxId);
             return View(product);
         }
 

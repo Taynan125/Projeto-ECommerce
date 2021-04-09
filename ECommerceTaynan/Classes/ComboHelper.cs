@@ -47,6 +47,32 @@ namespace ECommerceTaynan.Classes
             return comp = comp.OrderBy(d => d.Name).ToList();
         }
 
+        public static List<Category> GetCategories(int companyId)
+        {
+
+            var cat = db.Categories.Where(c => c.CompanyId == companyId).ToList();
+            cat.Add(new Category
+            {
+                CategoryId = 0,
+                Description = "[Selecione uma Categoria]"
+            });
+
+            return cat = cat.OrderBy(d => d.Description).ToList();
+        }
+
+        public static List<Tax> GetTaxes(int companyId)
+        {
+
+            var tax = db.Taxes.Where(c => c.CompanyId == companyId).ToList();
+            tax.Add(new Tax
+            {
+                TaxId = 0,
+                Description = "[Selecione uma Taxa]"
+            });
+
+            return tax = tax.OrderBy(d => d.Description).ToList();
+        }
+
         public void Dispose()
         {
             db.Dispose();
