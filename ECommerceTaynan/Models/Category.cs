@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,5 +24,7 @@ namespace ECommerceTaynan.Models
         public int CompanyId { get; set; }
 
         public virtual Company Company { get; set; }
+
+        public virtual ICollection<Product> Products { get; set; }
     }
 }
